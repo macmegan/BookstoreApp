@@ -4,63 +4,145 @@
  * and open the template in the editor.
  */
 package bookstoreapp;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.FileReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner; 
 import java.io.PrintWriter;
-import java.Scanner; 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-/**
- *
- * @author jason
- */
-public class Owner {
-   Books bb;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-private String name;
 
+public class Owner extends User{
+ 
+//name of associated file: books.txt
+//name of associated file: customer.txt 
+public static final String ownerPassword = "admin";
+private static final String ownerUsername = "admin";
+
+private String filename;
+private static Owner instance = null;
 private int capacity;
+private ArrayList<Customer> customersList = new ArrayList<Customer>();
+private ArrayList<Book> bookList = new ArrayList <Book>();
+private Customer customerInstance; 
 
-private CustomerList<Customers> customers;
 
-
-
-public User(){
-
-//should have the username and password set to "admin" and only then it would log in?
-
-}
-public void readFrom(Scanner input){
-//this should be reading the customers.txt maybe to print it in our table for the front end?
-
+private Owner(String n){
+    super(ownerPassword,ownerUsername);
+    filename = n; 
 }
 
- public void writeTo(PrintWriter output) {
-
-//here we write the new added customer information to the customer.txt which would be the username, password and point initially set to 0.
-
-}
-
-
-
- public void addCustomer(Customer newCustomer) {
-
-        customers.add(newCustomer);
-
-//something related to connecting with FX
-
-        FXCollections.sort(customers);
-
+//read owner input and create customer object and  
+//add to arraylist
+public void readFromCustomerList(String filename){
+   
+File file = new File(filename);
+    try {
+        Scanner scan = new Scanner(file);
+        
+        while(scan.hasNextLine()){
+        String line = scan.nextLine();
+        String array[]=line.split(",");
+        Customer c = new Customer (array[0], array[1], Integer.parseInt(array[2]));
+        customersList.add(c);
+        }
+        
+    } catch (FileNotFoundException ex) {
+        System.out.println("Customer not found");
     }
+
+
+}
+
+public void readFromBookList(String filename){
+    
+File file = new File(filename);
+    try {
+        Scanner scan = new Scanner(file);
+        
+        while(scan.hasNextLine()){
+        String line = scan.nextLine();
+        String array[]=line.split(",");
+        Book b = new Book (array[0], Double.parseDouble(array[2]));
+        bookList.add(b);
+        }
+        
+    } catch (FileNotFoundException ex) {
+        System.out.println("Book not found");
+    }
+
+}
+
+public void writeToCustomerList(String filename) {
+
+    try{
+        FileWriter r= new FileWriter(filename);
+        for(Customer c: customersList){
+        r.write(String.format("%s,%s,%d",c.getPassword(),c.getUsername(),c.getPoints()));
+        }
+        r.close();
+    }
+    catch(IOException e){
+        System.out.println("An error occurred.");
+        e.printStackTrace(); //what does this do?
+    }
+ 
+}
+ 
+ 
+public void writeToBookList(String filename) {
+
+    try{
+        FileWriter r= new FileWriter(filename);
+        for(Book b: bookList){
+        r.write(String.format("%s,%.2f",b.getName(),b.getPrice()));
+        }
+        r.close();
+    }
+    catch(IOException e){
+        System.out.println("An error occurred.");
+        e.printStackTrace(); //what does this do?
+    }
+ 
+
+}
+
+public static Owner getInstance(String n){
+
+    if(instance==null){
+        instance = new Owner(n);
+    }
+    return instance;
+}
+
+
+ public void addCustomer(Customer c) {
+ 
+     customersList.add(c);
+    }
+ 
 public void removeCustomer(Customer toRemove) {
 
-        customers.remove(toRemove);
+        customersList.remove(toRemove);
 
     }
 
+public Customer getCustomer(int index){
 
+    return customersList.get(index);
+} 
 
-
+public void printInfo(){
+}
 
 }
-     
-    }
-}
+
+
+ 

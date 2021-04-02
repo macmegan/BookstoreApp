@@ -5,6 +5,7 @@
  */
 package bookstoreapp;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -14,16 +15,59 @@ import java.util.Scanner;
 public abstract class User {
     private String password;
     private String username;
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 11 * hash + Objects.hashCode(this.password);
+        hash = 11 * hash + Objects.hashCode(this.username);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        if (!Objects.equals(this.password, other.password)) {
+            return false;
+        }
+        if (!Objects.equals(this.username, other.username)) {
+            return false;
+        }
+        return true;
+    }
     
     
-    public void User(String password, String username, int points, String book){
+    public User(String password, String username){
         this.password=password;
         this.username=username;
-        booklist= new ArrayList<Booklist>();
     }
-    public abstract String getPassword();
-    public abstract String getUsernmae();
-    public abstract void login ();
-    public abstract void logout ();
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    public void login(){}
+    public void logout(){}
     
 }
