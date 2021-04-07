@@ -1,5 +1,3 @@
-/*
- */
 package bookstore.app;
 
 import java.io.IOException;
@@ -22,13 +20,11 @@ import javafx.stage.Stage;
  * @author Megan Mac
  */
 public class StartScreenController implements Initializable {
-
-    @FXML
-    private Button books;
-    @FXML
-    private Button customers;
-    @FXML
-    private Button logout;
+    // FXML DECLARATIONS
+    // User interactive buttons
+    @FXML private Button books;
+    @FXML private Button customers;
+    @FXML private Button logout;
 
     /**
      * Initializes the controller class.
@@ -37,7 +33,10 @@ public class StartScreenController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
-
+    
+    /**
+     * Change scene to book management screen when books button is pressed
+     */
     @FXML
     private void manageBooks(ActionEvent event) throws IOException {
         Parent ownerBooksParent = FXMLLoader.load(getClass().getResource("ownerBooks.fxml"));
@@ -48,7 +47,10 @@ public class StartScreenController implements Initializable {
         window.setScene(ownerBooks);
         window.show();
     }
-
+    
+    /**
+     * Change scene to login screen when logout button is pressed
+     */
     @FXML
     private void logout(ActionEvent event) throws IOException {
         Parent adminLoginParent = FXMLLoader.load(getClass().getResource("adminLogin.fxml"));
@@ -59,7 +61,10 @@ public class StartScreenController implements Initializable {
         window.setScene(adminLogin);
         window.show();
     }
-
+    
+    /**
+     * Change scene to customer management screen when customer button is pressed
+     */
     @FXML
     private void cust(ActionEvent event) throws IOException {
         Parent Owner_CustomerParent = FXMLLoader.load(getClass().getResource("Owner_Customer.fxml"));
@@ -69,8 +74,5 @@ public class StartScreenController implements Initializable {
         
         window.setScene(Owner_Customer);
         window.show();
-        
     }
-
-    
 }
