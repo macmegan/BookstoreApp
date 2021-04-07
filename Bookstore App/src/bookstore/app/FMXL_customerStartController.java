@@ -75,8 +75,10 @@ public class FMXL_customerStartController implements Initializable {
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         Customer c = (Customer) window.getUserData();
         
+        //Create list to hold customer data
         ArrayList<String> custlist = new ArrayList<>();    
-    
+        
+        //Read in customer data
         File myObj = new File("src//bookstore//app//Customers.txt");
         try (Scanner read = new Scanner(myObj)) {
             while(read.hasNextLine()){ 
@@ -88,6 +90,8 @@ public class FMXL_customerStartController implements Initializable {
             System.out.println(e);
         }
         
+        //check if current customer's username and password equals to the one in
+        //the current line of Customers.txt and get points
         for(String i : custlist){
             String[] custlist2 = i.split(" ");
             if(c.getUsername().equals(custlist2[0]) && c.getPassword().equals(custlist2[1])){
@@ -95,6 +99,9 @@ public class FMXL_customerStartController implements Initializable {
                 oldpoints = custlist2[2];
             }
         }
+        
+        //get selected items and put them in an observable arraylist
+        //increased points and total cost accordingly
         ObservableList<Book> booksList = FXCollections.observableArrayList();
             tableview.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             ObservableList<Book> item = tableview.getSelectionModel().getSelectedItems();
@@ -103,18 +110,22 @@ public class FMXL_customerStartController implements Initializable {
                 points += b.price*10;
                 totalcost += b.price;
             }
-         
+        
+        //write total cost to file to share with customercost screen
         FileWriter totalwritecost = new FileWriter("src//bookstore//app//TotalCost.txt", false);
         totalwritecost.write(String.valueOf(totalcost));
         totalwritecost.close();
         c.points = points;
         
+        //update status based on current points
         if (points < 1000){
             c.setStatus(c.getSilver());
         }
         else
             c.setStatus(c.getGold());
         
+        //Update user's points in customers.txt
+        //Using buffer to read because it allows making changes without rewriting the file
         Scanner sc = new Scanner(new File("src//bookstore//app//Customers.txt"));
         StringBuffer buffer = new StringBuffer();
         
@@ -145,6 +156,8 @@ public class FMXL_customerStartController implements Initializable {
     /**
      * Initates points redemption when user pushes buy and redeem button
      */
+    //SEE COMMENTS ON BUY. The only difference is that points decrease and total cost decreases accordingly
+    //for each book
     public void RedeemBuy(ActionEvent event) throws IOException {
         double totalcost = 0;
         double bookcost;
@@ -155,7 +168,8 @@ public class FMXL_customerStartController implements Initializable {
         Customer c = (Customer) window.getUserData();
         
         ArrayList<String> custlist = new ArrayList<>();    
-    
+        
+        
         File myObj = new File("src//bookstore//app//Customers.txt");
         try (Scanner read = new Scanner(myObj)) {
             while(read.hasNextLine()){ 
