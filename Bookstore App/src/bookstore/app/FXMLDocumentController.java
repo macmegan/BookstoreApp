@@ -1,5 +1,3 @@
-/*
- */
 package bookstore.app;
 
 import java.io.IOException;
@@ -34,31 +32,22 @@ import javafx.collections.ObservableList;
  * @author Megan Mac
  */
 public class FXMLDocumentController implements Initializable {
-    //declaring elements
-    @FXML
-    private Label loginError;
-    @FXML
-    Button login;
-    @FXML
-    Button adminLogin;
-    @FXML
-    protected TextField txtusername;
-    @FXML
-    protected PasswordField txtpassword;
-    @FXML
-    TableView tableview;
-    @FXML
-    protected TextField aduser;
-    @FXML
-    protected PasswordField adpass;
-    
-    
-    
-    
-     //gets called when admin-login button is clicked
+    // FXML DECLARATIONS
+    @FXML private Label loginError;
+    @FXML Button login;
+    @FXML Button adminLogin;
+    @FXML protected TextField txtusername;
+    @FXML protected PasswordField txtpassword;
+    @FXML TableView tableview;
+    @FXML protected TextField aduser;
+    @FXML protected PasswordField adpass;
+         
+    /**
+     * Verifies admin login credentials and changes scene if successful, displays error otherwise
+     */ 
     @FXML
     private void SuccessfulAdminLogin(ActionEvent event) throws IOException {
-        //Check if username and password is admin then load owner start screen
+        // Verify if username and password is correct and load owner start screen
         if("admin".equals(aduser.getText()) && "admin".equals(adpass.getText())){
             Parent ownerStartParent = FXMLLoader.load(getClass().getResource("ownerStart.fxml"));
             Scene ownerStart = new Scene(ownerStartParent);
@@ -73,36 +62,34 @@ public class FXMLDocumentController implements Initializable {
     }
     
    
-    //checking user login
-   //called on userlogin screen when user login successful  
+    /**
+     * Verifies customer login credentials and changes scene if successful, displays error otherwise
+     */ 
     public void successfulLogin (ActionEvent event) throws IOException {
         Customer user = new Customer(txtusername.getText(), txtpassword.getText(), 0);     
         FileWriter write = new FileWriter("src//bookstore//app//CurrentCustomer.txt", false);
         write.write(txtusername.getText() + " " + txtpassword.getText());
         write.close();
         
-        if(user.login()){ //if login method returns true then label shows login success
-                loginError.setText("Login Success");
-           //loads customerStart by setting new scene
-                Parent CustomerStartScreenParent = FXMLLoader.load(getClass().getResource("FMXL_customerStart.fxml"));
+        if(user.login()){ // if login method returns true then label shows login success
+            loginError.setText("Login Success");
+            // Loads customer start screen by setting new scene
+            Parent CustomerStartScreenParent = FXMLLoader.load(getClass().getResource("FMXL_customerStart.fxml"));
                 
-                Scene CustomerStartScreen = new Scene(CustomerStartScreenParent);
+            Scene CustomerStartScreen = new Scene(CustomerStartScreenParent);
                 
-                Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-                window.setUserData(user);
-                window.setScene(CustomerStartScreen);
-                window.show();
-                
-            }
+            Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+            window.setUserData(user);
+            window.setScene(CustomerStartScreen);
+            window.show();  
+        }
         else{
-            // error message incase sth goes wrong
+            // Display login error if password or username is incorrect
             loginError.setText("Login Failed");
         }
-        } 
-        
-        
+    }    
     
-    //When sign-in as admin is clicked it loads new scene: adminlogin.fxml 
+    // When sign-in as admin is clicked it loads new scene: adminlogin.fxml 
     public void adminLogin (ActionEvent event) throws IOException {
         Parent adminLoginParent = FXMLLoader.load(getClass().getResource("adminLogin.fxml"));
         Scene adminLogins = new Scene(adminLoginParent);
