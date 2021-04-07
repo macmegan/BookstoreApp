@@ -60,7 +60,6 @@ public class FXMLDocumentController implements Initializable {
         else
             loginError.setText("Login Failed");
     }
-    
    
     /**
      * Verifies customer login credentials and changes scene if successful, displays error otherwise
@@ -89,7 +88,9 @@ public class FXMLDocumentController implements Initializable {
         }
     }    
     
-    // When sign-in as admin is clicked it loads new scene: adminlogin.fxml 
+    /**
+     * When sign-in as admin is clicked it loads new scene: adminlogin.fxml 
+     */
     public void adminLogin (ActionEvent event) throws IOException {
         Parent adminLoginParent = FXMLLoader.load(getClass().getResource("adminLogin.fxml"));
         Scene adminLogins = new Scene(adminLoginParent);
