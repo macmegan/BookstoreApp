@@ -40,7 +40,8 @@ public class userCostController implements Initializable {
     @FXML private Label totalcost;
     
     /**
-     * Takes user back to login screen when the logout button is pushed
+     * Takes user back to login screen when the logout button is pushed; 
+    this loads up the scene of the UserLogin window
      */
     public void logout (ActionEvent event) throws IOException {
         Parent logoutParent = FXMLLoader.load(getClass().getResource("userLogin.fxml"));
@@ -55,6 +56,11 @@ public class userCostController implements Initializable {
     /**
      * Initializes the controller class.
      */
+
+    //since the customer.txt and book.txt is already loaded as new after the buy and redeeemBuy is clicked from the CustomerStartController, here we load the customer.txt
+    //and books.txt again and then we compare the points again of the updated info and then set texts to the labels: pointstxt, statustxt and totalcost
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
