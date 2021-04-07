@@ -20,13 +20,19 @@ import javafx.stage.Stage;
  */
 public class ownerStartController implements Initializable {
 
+    //declaring elements
+
     @FXML
     Button books;
     @FXML
     Button customers;
     @FXML
     Button logout;
-    
+
+     //all these methods are called for their respective buttons which basically sets up for the next scene.
+
+
+     //this successfuLogin is for admin login
     public void successfulLogin (ActionEvent event) throws IOException {
         Parent ownerStartParent = FXMLLoader.load(getClass().getResource("ownerStart.fxml"));
         Scene ownerStart = new Scene(ownerStartParent);
