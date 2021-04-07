@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bookstore.app;
 
 import java.util.ArrayList;
@@ -21,11 +16,11 @@ public class Book {
     public String name;
     public CheckBox select;
     
-Book(String name, double price){
-    this.name=name;
-    this.price=price; 
-    this.select = new CheckBox();
-}
+    Book(String name, double price){
+        this.name=name;
+        this.price=price; 
+        this.select = new CheckBox();
+    }
 
     public double getPrice() {
         return price;
@@ -49,7 +44,4 @@ Book(String name, double price){
     public void setBookSelection(CheckBox select) {
         this.select = select;
     }
-
-
-
 }
