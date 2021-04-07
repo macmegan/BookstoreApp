@@ -53,10 +53,15 @@ import javafx.scene.control.cell.CheckBoxTableCell;
  */
 public class FMXL_customerStartController implements Initializable {
     // FXML DECLARATIONS
+    // User interactive buttons
     @FXML Button BuyBut;
     @FXML Button RedeemBuy;
     @FXML Button logout;
+    
+    // Initialise table
     @FXML TableView tableview;
+    
+    // Display customer info
     @FXML private Label username;
     @FXML private Label points;
     @FXML private Label password;
@@ -68,17 +73,18 @@ public class FMXL_customerStartController implements Initializable {
      * Initiates a purchase when user presses the buy button
      */
     public void Buy(ActionEvent event) throws IOException {
-        
+        // Variable declaration
         double totalcost = 0;
         int points = 0;
         String oldpoints = "";
+        
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         Customer c = (Customer) window.getUserData();
         
-        //Create list to hold customer data
+        // Create Arraylist to store customer data
         ArrayList<String> custlist = new ArrayList<>();    
         
-        //Read in customer data
+        // Create file object and read in customer data
         File myObj = new File("src//bookstore//app//Customers.txt");
         try (Scanner read = new Scanner(myObj)) {
             while(read.hasNextLine()){ 
@@ -90,18 +96,19 @@ public class FMXL_customerStartController implements Initializable {
             System.out.println(e);
         }
         
-        //check if current customer's username and password equals to the one in
-        //the current line of Customers.txt and get points
+        // Check if current customer's username and password equals to the one in
+        // the current line of Customers.txt and get points
         for(String i : custlist){
             String[] custlist2 = i.split(" ");
+            
             if(c.getUsername().equals(custlist2[0]) && c.getPassword().equals(custlist2[1])){
                 points = Integer.parseInt(custlist2[2]);
                 oldpoints = custlist2[2];
             }
         }
         
-        //get selected items and put them in an observable arraylist
-        //increased points and total cost accordingly
+        // Get selected items and put them in an observable arraylist
+        // Increase point and total cost accordingly
         ObservableList<Book> booksList = FXCollections.observableArrayList();
             tableview.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             ObservableList<Book> item = tableview.getSelectionModel().getSelectedItems();
@@ -111,21 +118,21 @@ public class FMXL_customerStartController implements Initializable {
                 totalcost += b.price;
             }
         
-        //write total cost to file to share with customercost screen
+        // Write total cost to file to share with customer cost screen
         FileWriter totalwritecost = new FileWriter("src//bookstore//app//TotalCost.txt", false);
         totalwritecost.write(String.valueOf(totalcost));
         totalwritecost.close();
         c.points = points;
         
-        //update status based on current points
+        // Update customer status based on current points
         if (points < 1000){
             c.setStatus(c.getSilver());
         }
         else
             c.setStatus(c.getGold());
         
-        //Update user's points in customers.txt
-        //Using buffer to read because it allows making changes without rewriting the file
+        // Update user's points in customers.txt
+        // Using buffer to read because it allows making changes without rewriting the file
         Scanner sc = new Scanner(new File("src//bookstore//app//Customers.txt"));
         StringBuffer buffer = new StringBuffer();
         
@@ -156,20 +163,21 @@ public class FMXL_customerStartController implements Initializable {
     /**
      * Initates points redemption when user pushes buy and redeem button
      */
-    //SEE COMMENTS ON BUY. The only difference is that points decrease and total cost decreases accordingly
-    //for each book
     public void RedeemBuy(ActionEvent event) throws IOException {
+        // Variable declaration
         double totalcost = 0;
         double bookcost;
         int reduction = 0;
         int points = 0;
         String oldpoints = "";
+        
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         Customer c = (Customer) window.getUserData();
         
+        // Create Arraylist to store customer data
         ArrayList<String> custlist = new ArrayList<>();    
         
-        
+        // Create file object and read in customer data
         File myObj = new File("src//bookstore//app//Customers.txt");
         try (Scanner read = new Scanner(myObj)) {
             while(read.hasNextLine()){ 
@@ -181,40 +189,52 @@ public class FMXL_customerStartController implements Initializable {
             System.out.println(e);
         }
         
+        // Verify customer login credentials using Customers.txt and retrieve point balance
         for(String i : custlist){
             String[] custlist2 = i.split(" ");
+            
             if(c.getUsername().equals(custlist2[0]) && c.getPassword().equals(custlist2[1])){
                 points = Integer.parseInt(custlist2[2]);
                 oldpoints = custlist2[2];
             }
         }
         
+        // Get selected items and put them in an observable arraylist
         ObservableList<Book> booksList = FXCollections.observableArrayList();
-            tableview.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-            ObservableList<Book> item = tableview.getSelectionModel().getSelectedItems();
-            for (Book b : item){
-                booksList.add(b);
-                bookcost = b.price;
-                totalcost+=bookcost;
-                while(points > 99 && bookcost > 0){
-                    points -= 100;
-                    bookcost -= 1;
-                    reduction++;
-                }
+        tableview.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        ObservableList<Book> item = tableview.getSelectionModel().getSelectedItems();
+
+        // Adjust point balance and total cost based on product selection
+        for (Book b : item){
+            booksList.add(b);
+            bookcost = b.price;
+            totalcost+=bookcost;
+            
+            // Calculate points eligible for redemption given book cost and point balance
+            while(points > 99 && bookcost > 0){
+                points -= 100;
+                bookcost -= 1;
+                reduction++;
             }
+        }
         
+        // Write total cost to file to share with transaction summary screen
+        // Account for reduction in total cost from point redemption
         totalcost -= reduction; 
         FileWriter totalwritecost = new FileWriter("src//bookstore//app//TotalCost.txt", false);
         totalwritecost.write(String.valueOf(totalcost));
         totalwritecost.close();
         c.points = points;
         
+        // Update customer status based on current points
         if (points < 1000){
             c.setStatus(c.getSilver());
         }
         else
             c.setStatus(c.getGold());
         
+        // Update user's points in customers.txt
+        // Using buffer to read because it allows making changes without rewriting the file       
         Scanner sc = new Scanner(new File("src//bookstore//app//Customers.txt"));
         StringBuffer buffer = new StringBuffer();
         
@@ -263,40 +283,44 @@ public class FMXL_customerStartController implements Initializable {
     public void initialize(URL url, ResourceBundle rb){
         String pointsnew = "";
         File myobj = new File("src//bookstore//app//CurrentCustomer.txt");
+        
         try {
             Scanner read = new Scanner(myobj);
             String[] data = read.nextLine().split(" ");
             ArrayList<String> custlist = new ArrayList<>();
         
-        File myObj = new File("src//bookstore//app//Customers.txt");
+            File myObj = new File("src//bookstore//app//Customers.txt");
         
-        try (Scanner readn = new Scanner(myObj)) {
-            while(readn.hasNextLine()){ 
-                String datan = readn.nextLine();
-                custlist.add(datan);
+            try (Scanner readn = new Scanner(myObj)) {
+                while(readn.hasNextLine()){ 
+                    String datan = readn.nextLine();
+                    custlist.add(datan);
+                }
             }
-        }
-        catch(FileNotFoundException e){
-            System.out.println(e);
-        }
+            catch(FileNotFoundException e){
+                System.out.println(e);
+            }
         
-        for(String i : custlist){
-            String[] custlist2 = i.split(" ");
-            if(data[0].equals(custlist2[0]) && data[1].equals(custlist2[1]))
-                pointsnew = custlist2[2];
-        }
-        usertxt.setText(data[0]);
-        pointstxt.setText(pointsnew);
-        if(Double.parseDouble(pointsnew) > 1000)
-            statustxt.setText("Gold");
-        else
-            statustxt.setText("Silver");
+            for(String i : custlist){
+                String[] custlist2 = i.split(" ");
+                
+                if(data[0].equals(custlist2[0]) && data[1].equals(custlist2[1]))
+                    pointsnew = custlist2[2];
+            }
             
-        } catch (FileNotFoundException ex) {
+            usertxt.setText(data[0]);
+            pointstxt.setText(pointsnew);
+            
+            if(Double.parseDouble(pointsnew) > 1000)
+                statustxt.setText("Gold");
+            else
+                statustxt.setText("Silver");  
+        } 
+        catch (FileNotFoundException ex) {
             Logger.getLogger(FMXL_customerStartController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        // Create table to enable users to select products for purchase
+        // Create interactive table to enable users to select products for purchase
         tableview.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         Book item = (Book) tableview.getSelectionModel().getSelectedItem();
         TableColumn bookname = new TableColumn("Name");
@@ -319,16 +343,9 @@ public class FMXL_customerStartController implements Initializable {
         }
         
         // Set up columns in the table
-        bookname.setCellValueFactory(
-                new PropertyValueFactory<>("name")
-        );
-        bookprice.setCellValueFactory(
-                new PropertyValueFactory<>("price")
-        );
-        selectCol.setCellValueFactory(
-                new PropertyValueFactory<Book,CheckBox>("select")
-        );
-          
+        bookname.setCellValueFactory(new PropertyValueFactory<>("name"));
+        bookprice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        selectCol.setCellValueFactory(new PropertyValueFactory<Book,CheckBox>("select"));
         selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
         tableview.setItems(books);
     }    
