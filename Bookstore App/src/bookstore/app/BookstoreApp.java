@@ -1,5 +1,3 @@
-/*
- */
 package bookstore.app;
 
 import javafx.application.Application;
