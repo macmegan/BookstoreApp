@@ -36,7 +36,9 @@ import javafx.stage.Stage;
  * @author Megan Mac
  */
 public class OwnerBooksController implements Initializable {
-    // declares elements on the window
+
+    // declares elements of the window
+
     @FXML Button addBook;
     @FXML Button deleteBook;
     @FXML Button back;
