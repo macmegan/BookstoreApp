@@ -1,6 +1,5 @@
 package bookstore.app;
 
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -36,15 +35,18 @@ import javafx.stage.Stage;
  * @author Megan Mac
  */
 public class OwnerBooksController implements Initializable {
-
-    // declares elements of the window
-
+    // FXML DECLARATIONS
+    // User interactive buttons
     @FXML Button addBook;
     @FXML Button deleteBook;
     @FXML Button back;
+    
+    // Initialise table
     @FXML TableView<Book> bookTableView;
     @FXML TableColumn<Book,String> bookNameCol;
     @FXML TableColumn<Book,String> bookPriceCol;
+    
+    // User input text fields
     @FXML TextField enterBookName;
     @FXML TextField enterBookPrice;
     
@@ -69,6 +71,7 @@ public class OwnerBooksController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // Set up columns in table
         bookNameCol.setCellValueFactory(new PropertyValueFactory<Book,String>("name"));
         bookPriceCol.setCellValueFactory(new PropertyValueFactory<Book,String>("price"));
         
@@ -76,7 +79,7 @@ public class OwnerBooksController implements Initializable {
     }
     
     /**
-     * Adds new book object to table
+     * Adds new book object to table when user inputs text and presses add button
      */
     public void addBook() throws IOException {
         Book newBook = new Book(enterBookName.getText(), Double.parseDouble(enterBookPrice.getText()));
@@ -89,25 +92,26 @@ public class OwnerBooksController implements Initializable {
     }
     
     /**
-     * Deletes existing book object from table
+     * Deletes existing book object(s) from table
      */
     public void deleteBook() throws FileNotFoundException, IOException {
         ObservableList<Book> selectedRows, allBooks;
         allBooks = bookTableView.getItems();
         
+        // Retrieve user selected rows
         selectedRows = bookTableView.getSelectionModel().getSelectedItems();
-           
+        
+        // Loop over selected rows and remove book objects from table
         for (Book book: selectedRows) {         
             allBooks.remove(book);
         }
         
         FileWriter writeBook = new FileWriter("src//bookstore//app/Books.txt");
+        
         for (Book book : allBooks){
-            writeBook.write(book.name + " " + book.price + System.lineSeparator()); 
-            
+            writeBook.write(book.name + " " + book.price + System.lineSeparator());
         }
         writeBook.close();
-        
     }
     
     /**
@@ -120,14 +124,15 @@ public class OwnerBooksController implements Initializable {
         try {
             File myBook = new File("src//bookstore//app//Books.txt");
             Scanner readin = new Scanner(myBook);
+            
             while(readin.hasNextLine()){
                 String[] BookInfo = readin.nextLine().split(" ");
                 books.add(new Book(BookInfo[0], Double.parseDouble(BookInfo[1])));
+            } 
         } 
-        } catch(FileNotFoundException e){
+        catch(FileNotFoundException e){
             System.out.println(e);
         }
-        
         return books;
     }
 }
