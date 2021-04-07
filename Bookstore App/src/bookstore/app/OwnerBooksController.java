@@ -36,7 +36,7 @@ import javafx.stage.Stage;
  * @author Megan Mac
  */
 public class OwnerBooksController implements Initializable {
-
+    // declares elements on the window
     @FXML Button addBook;
     @FXML Button deleteBook;
     @FXML Button back;
@@ -52,6 +52,7 @@ public class OwnerBooksController implements Initializable {
      * @throws IOException 
      */
     public void backButton (ActionEvent event) throws IOException {
+        //sets scene to the last scene: ownerstart.fxml
         Parent goBackParent = FXMLLoader.load(getClass().getResource("ownerStart.fxml"));
         Scene goBack = new Scene(goBackParent);
         
