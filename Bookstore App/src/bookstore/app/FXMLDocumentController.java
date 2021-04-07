@@ -58,6 +58,7 @@ public class FXMLDocumentController implements Initializable {
      //gets called when admin-login button is clicked
     @FXML
     private void SuccessfulAdminLogin(ActionEvent event) throws IOException {
+        //Check if username and password is admin then load owner start screen
         if("admin".equals(aduser.getText()) && "admin".equals(adpass.getText())){
             Parent ownerStartParent = FXMLLoader.load(getClass().getResource("ownerStart.fxml"));
             Scene ownerStart = new Scene(ownerStartParent);
