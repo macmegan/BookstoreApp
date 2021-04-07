@@ -1,11 +1,5 @@
 package bookstore.app;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
  * @author AMR
@@ -36,17 +30,18 @@ import javafx.stage.Stage;
  * @author Megan Mac
  */
 public class userCostController implements Initializable {
-
-    @FXML
-    Button logout;
-    @FXML
-    private Label pointstxt;
-    @FXML
-    private Label statustxt;
-    @FXML
-    private Label totalcost;
+    // FXML DECLARATIONS
+    // Button for user interaction
+    @FXML Button logout;
     
+    // Labels to display customer information 
+    @FXML private Label pointstxt;
+    @FXML private Label statustxt;
+    @FXML private Label totalcost;
     
+    /**
+     * Takes user back to login screen when the logout button is pushed
+     */
     public void logout (ActionEvent event) throws IOException {
         Parent logoutParent = FXMLLoader.load(getClass().getResource("userLogin.fxml"));
         Scene logout = new Scene(logoutParent);
@@ -106,6 +101,5 @@ public class userCostController implements Initializable {
         } catch(FileNotFoundException e){
             System.out.println(e);
         }
-    }    
-    
+    }     
 }
