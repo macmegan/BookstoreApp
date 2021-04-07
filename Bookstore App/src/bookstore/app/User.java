@@ -1,9 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bookstore.app;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -15,12 +11,11 @@ import java.util.Scanner;
  * @author jason
  */
 public abstract class User {
-    
+    // Variable declaration
     public ArrayList<Book> bookList = new ArrayList <Book>();
     protected ArrayList<Customer> customersList = new ArrayList<Customer>();
     private String password;
     private String username;
-
 
     @Override
     public boolean equals(Object obj) {
@@ -42,8 +37,7 @@ public abstract class User {
         }
         return true;
     }
-    
-    
+      
     public User(String password, String username){
         this.password=password;
         this.username=username;
@@ -66,9 +60,9 @@ public abstract class User {
     }
     
     public boolean login(){
-    ArrayList<String> custlist = new ArrayList<>();    
+        ArrayList<String> custlist = new ArrayList<>();    
     
-    File myObj = new File("src//bookstore//app//Customers.txt");
+        File myObj = new File("src//bookstore//app//Customers.txt");
         try (Scanner read = new Scanner(myObj)) {
             while(read.hasNextLine()){ 
                 String data = read.nextLine();
@@ -87,7 +81,8 @@ public abstract class User {
         }
         return false;
     }
-public void logout(){}
+    
+    public void logout(){}
 
 }
     
