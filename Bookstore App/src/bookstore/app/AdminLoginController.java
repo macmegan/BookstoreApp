@@ -1,5 +1,3 @@
-/*
- */
 package bookstore.app;
 
 import java.net.URL;
@@ -19,6 +17,5 @@ public class AdminLoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }     
 }
