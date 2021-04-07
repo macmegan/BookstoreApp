@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bookstore.app;
 
 import java.io.IOException;
@@ -25,8 +20,7 @@ import javafx.stage.Stage;
  */
 public class Owner_CustomerController implements Initializable {
 
-    @FXML
-    private Button back;
+    @FXML private Button back;
 
     /**
      * Initializes the controller class.
@@ -36,13 +30,19 @@ public class Owner_CustomerController implements Initializable {
         // TODO
     }    
 
+    /**
+     * Changes scene to owner start screen when back button is pushed
+     */
     @FXML
     private void back_button(ActionEvent event) throws IOException {
+        // Create and load scene
         Parent ownerStartParent = FXMLLoader.load(getClass().getResource("ownerStart.fxml"));
         Scene ownerStart = new Scene(ownerStartParent);
         
+        // Retrieve stage info 
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         
+        // Change scene
         window.setScene(ownerStart);
         window.show();
     }
