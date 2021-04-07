@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bookstore.app;
 
 import java.io.IOException;
@@ -55,39 +50,23 @@ import javafx.scene.control.cell.CheckBoxTableCell;
  * FXML Controller class
  *
  * @author anika
- */  
-    
+ */
 public class FMXL_customerStartController implements Initializable {
-
-    @FXML
-    Button BuyBut;
-    @FXML
-    Button RedeemBuy;
-    @FXML
-    Button logout;
-    @FXML
-    TableView tableview;
-    @FXML
-    private Label username;
-    @FXML
-    private Label points;
-    @FXML
-    private Label password;
-    @FXML
-    TextArea usertxt;
-    @FXML
-    TextArea statustxt;
-    @FXML
-    TextArea pointstxt;
+    // FXML DECLARATIONS
+    @FXML Button BuyBut;
+    @FXML Button RedeemBuy;
+    @FXML Button logout;
+    @FXML TableView tableview;
+    @FXML private Label username;
+    @FXML private Label points;
+    @FXML private Label password;
+    @FXML TextArea usertxt;
+    @FXML TextArea statustxt;
+    @FXML TextArea pointstxt;
     
-    // private Customer info = new Customer(password, username, points);
-    
-    
-    // points.setText();
-    
-   
-    
-    
+    /**
+     * Initiates a purchase when user presses the buy button
+     */
     public void Buy(ActionEvent event) throws IOException {
         
         double totalcost = 0;
@@ -129,18 +108,20 @@ public class FMXL_customerStartController implements Initializable {
         totalwritecost.write(String.valueOf(totalcost));
         totalwritecost.close();
         c.points = points;
+        
         if (points < 1000){
             c.setStatus(c.getSilver());
         }
         else
             c.setStatus(c.getGold());
         
-        
         Scanner sc = new Scanner(new File("src//bookstore//app//Customers.txt"));
         StringBuffer buffer = new StringBuffer();
+        
         while (sc.hasNextLine()){
             buffer.append(sc.nextLine()+System.lineSeparator());
         }
+        
         String fileContents = buffer.toString();
         sc.close();
         String oldline = c.getUsername() + " " + c.getPassword() + " " + oldpoints;
@@ -151,6 +132,7 @@ public class FMXL_customerStartController implements Initializable {
         write.append(fileContents);
         write.flush();
         
+        // Change scene to transaction summary screen
         Parent buyOrRedeemParent = FXMLLoader.load(getClass().getResource("userCost.fxml"));
         Scene buyOrRedeem = new Scene(buyOrRedeemParent);
         
@@ -160,6 +142,9 @@ public class FMXL_customerStartController implements Initializable {
         window2.show();
     }
     
+    /**
+     * Initates points redemption when user pushes buy and redeem button
+     */
     public void RedeemBuy(ActionEvent event) throws IOException {
         double totalcost = 0;
         double bookcost;
@@ -189,6 +174,7 @@ public class FMXL_customerStartController implements Initializable {
                 oldpoints = custlist2[2];
             }
         }
+        
         ObservableList<Book> booksList = FXCollections.observableArrayList();
             tableview.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
             ObservableList<Book> item = tableview.getSelectionModel().getSelectedItems();
@@ -202,23 +188,26 @@ public class FMXL_customerStartController implements Initializable {
                     reduction++;
                 }
             }
+        
         totalcost -= reduction; 
         FileWriter totalwritecost = new FileWriter("src//bookstore//app//TotalCost.txt", false);
         totalwritecost.write(String.valueOf(totalcost));
         totalwritecost.close();
         c.points = points;
+        
         if (points < 1000){
             c.setStatus(c.getSilver());
         }
         else
             c.setStatus(c.getGold());
         
-        
         Scanner sc = new Scanner(new File("src//bookstore//app//Customers.txt"));
         StringBuffer buffer = new StringBuffer();
+        
         while (sc.hasNextLine()){
             buffer.append(sc.nextLine()+System.lineSeparator());
         }
+        
         String fileContents = buffer.toString();
         sc.close();
         String oldline = c.getUsername() + " " + c.getPassword() + " " + oldpoints;
@@ -229,6 +218,7 @@ public class FMXL_customerStartController implements Initializable {
         write.append(fileContents);
         write.flush();
         
+        // Change scene to transaction summary screen
         Parent buyOrRedeemParent = FXMLLoader.load(getClass().getResource("userCost.fxml"));
         Scene buyOrRedeem = new Scene(buyOrRedeemParent);
         
@@ -238,18 +228,23 @@ public class FMXL_customerStartController implements Initializable {
         window2.show();
     }
     
+    /**
+     * Returns user to login screen when the logout button is pushed
+     */
     public void logout (ActionEvent event) throws IOException {
+        // Load scene
         Parent logoutParent = FXMLLoader.load(getClass().getResource("userLogin.fxml"));
         Scene logout = new Scene(logoutParent);
         
+        // Change scene to login screen
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-        
         window.setScene(logout);
         window.show();
     } 
-    
   
-   
+    /**
+     * Initialises the controller class
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb){
         String pointsnew = "";
@@ -287,7 +282,7 @@ public class FMXL_customerStartController implements Initializable {
             Logger.getLogger(FMXL_customerStartController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
+        // Create table to enable users to select products for purchase
         tableview.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         Book item = (Book) tableview.getSelectionModel().getSelectedItem();
         TableColumn bookname = new TableColumn("Name");
@@ -297,19 +292,19 @@ public class FMXL_customerStartController implements Initializable {
         
         ObservableList<Book> books = FXCollections.observableArrayList();
         File myObj = new File("src//bookstore//app//Books.txt");
+        
         try (Scanner read = new Scanner(myObj)) {
             while(read.hasNextLine()){ 
                 String data = read.nextLine();
                 String[] booksinfo = data.split(" ");
                 books.add(new Book(booksinfo[0], Double.parseDouble(booksinfo[1])));
-                
             }
-            
         }
         catch(FileNotFoundException e){
             System.out.println(e);
         }
         
+        // Set up columns in the table
         bookname.setCellValueFactory(
                 new PropertyValueFactory<>("name")
         );
@@ -319,13 +314,10 @@ public class FMXL_customerStartController implements Initializable {
         selectCol.setCellValueFactory(
                 new PropertyValueFactory<Book,CheckBox>("select")
         );
-        
-        
+          
         selectCol.setCellFactory(CheckBoxTableCell.forTableColumn(selectCol));
-        
         tableview.setItems(books);
     }    
-    
 }
     
     
